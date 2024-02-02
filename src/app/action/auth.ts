@@ -7,3 +7,9 @@ export async function signInWithGithubAction(formData: FormData) {
     redirectTo: "/dashboard",
   });
 }
+
+export async function signOutAction() {
+  await signOut({
+    redirectTo: "/auth/login",
+  });
+}
