@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import GitHub from "@auth/core/providers/github";
 
 // auth.js library
 export const {
@@ -8,6 +9,10 @@ export const {
   signOut,
 } = NextAuth({
   providers: [
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
   ],
   callbacks: {
     async authorized({ request, auth }) {
