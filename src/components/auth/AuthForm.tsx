@@ -11,7 +11,9 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { signInWithGithubAction } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
+import { useAuthToast } from "@/hooks/useUtilsToast";
 
+// put components associated with DOM in components directory, put functions related to logic in hooks directory
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signin" | "signup";
 }
@@ -22,10 +24,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const githubSSORef = useRef(null);
   const { type } = props;
   const router = useRouter();
+  const { showAuthToast } = useAuthToast();
 
   async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
+    // const onSubmit = async (event: React.SyntheticEvent) => {
     setIsLoading(true);
+
+    // use original form submit
+    event.preventDefault();
     const form = new FormData(event.target as HTMLFormElement);
 
     // currently, next-auth.js has no signUp function
@@ -33,6 +39,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       const passwordVal = form.get("password");
       const passwordConfirmationVal = form.get("passwordConfirmation");
       if (passwordVal !== passwordConfirmationVal) {
+        showAuthToast({
+          title: "Password mismatch",
+          description: "Please check your input and try again.",
+        });
+        setIsLoading(false);
+
         return null;
       }
 
