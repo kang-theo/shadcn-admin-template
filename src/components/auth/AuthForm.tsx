@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { signInWithGithubAction } from "@/app/actions/auth";
+import { useRouter } from "next/navigation";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signin" | "signup";
@@ -19,8 +21,57 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [signing, setSigning] = useState(false);
   const githubSSORef = useRef(null);
   const { type } = props;
+  const router = useRouter();
 
   async function onSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+    const form = new FormData(event.target as HTMLFormElement);
+
+    // currently, next-auth.js has no signUp function
+    if (type === "signup") {
+      const passwordVal = form.get("password");
+      const passwordConfirmationVal = form.get("passwordConfirmation");
+      if (passwordVal !== passwordConfirmationVal) {
+        return null;
+      }
+
+      // send to api server for register
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // send in JSON string
+        body: JSON.stringify({
+          // csrfToken: form.get("csrfToken"),
+          username: form.get("username"),
+          email: form.get("email"),
+          password: passwordVal,
+          passwordConfirmation: passwordConfirmationVal,
+        }),
+      });
+
+      const data: any = await res.json();
+      const metaData: any = data.meta;
+      if (metaData.code == "OK"){
+        router.push("/auth/login");
+      }
+
+      setIsLoading(false);
+      return null;
+    }
+
+    // after register successfully
+    // next-auth.js provided signIn function; it sends credentials and next-auth.js will use prisma client to find in mysql
+    await signIn("credentials", {
+      username: form.get("username"),
+      password: form.get("password"),
+      callbackUrl: "/",
+    }).catch((err) => {
+      setIsLoading(false);
+      console.error(err);
+    });
   }
 
   const handleSigning = useCallback((e: React.SyntheticEvent) => {

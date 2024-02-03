@@ -4,6 +4,7 @@ import TermAndPrivacy from "@/components/common/TermAndPrivacy";
 
 import { UserAuthForm } from "@/components/auth/AuthForm";
 
+// SEO
 export const metadata: Metadata = {
   title: "Shadcn admin starter authentication",
   description:
