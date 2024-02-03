@@ -64,26 +64,78 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         }),
       });
 
-      const data: any = await res.json();
-      const metaData: any = data.meta;
-      if (metaData.code == "OK"){
-        router.push("/auth/login");
-      }
+      try {
+        const data: any = await res.json();
 
-      setIsLoading(false);
-      return null;
+        if (res.ok) {
+          const metaData = data.meta;
+
+          if (metaData.code !== "OK") {
+            // Handle the error, e.g., show an error message to the user
+            showAuthToast({
+              title: "Server Error",
+              description:
+                metaData.message ||
+                "An unexpected error occurred on the server. Please try again later or contact support for assistance.",
+            });
+          }
+          else {
+            router.push('/auth/login');
+          }
+        } else {
+          // Handle HTTP error status (e.g., res.status is not 2xx)
+          // Corner case, edge case
+          // Event or User Behavior Tracking (埋点): RPC(Remote Procedure Call) submit logs to server for analysis in case of server down
+          // console.error(`HTTP Error: ${res.statusText}`);
+          showAuthToast({
+            title: "Internet Error",
+            description:
+              "Please try again later or contact support for assistance.",
+          });
+        }
+      } catch (error) {
+        // Handle JSON parsing error
+        console.error("Error parsing JSON:", error);
+      } finally {
+        // Always set loading to false, whether there was an error or not
+        setIsLoading(false);
+        return null;
+      }
     }
 
     // after register successfully
     // next-auth.js provided signIn function; it sends credentials and next-auth.js will use prisma client to find in mysql
-    await signIn("credentials", {
-      username: form.get("username"),
-      password: form.get("password"),
-      callbackUrl: "/",
-    }).catch((err) => {
+    try {
+      const result = await signIn("credentials", {
+        username: form.get("username"),
+        password: form.get("password"),
+        callbackUrl: "/dashboard",
+      });
+
+      if (result && result.error) {
+        // Handle authentication error
+        // alert("Authentication failed: " + result.error);
+      } else {
+        // Authentication succeeded, result contains session object
+        // alert("Authentication successful: " + JSON.stringify(result));
+        // Redirect or perform other actions
+      }
+
+      // console.log("Authentication successful");
+    } catch (err) {
+      console.error("Authentication failed", err);
+      // alert(err);
+      if (err instanceof Error) {
+        showAuthToast({
+          title: "Sign In Error",
+          description: err.message || "Please check your input and try again.",
+        });
+      } else {
+        console.error('An unexpected error occurred.', err);
+      }
+
       setIsLoading(false);
-      console.error(err);
-    });
+    };
   }
 
   const handleSigning = useCallback((e: React.SyntheticEvent) => {
@@ -95,6 +147,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
+      {/* use ajax to call API */}
       <form onSubmit={onSubmit}>
         <div className='grid gap-2'>
           {type === "signup" && (
@@ -176,9 +229,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </Link>
             </p>
           ) : (
-            <p>
+            <p className='text-sm text-center'>
               Do you already have an account?{" "}
-              <Link href='/auth/login'>Sign in</Link>
+              <Link href='/auth/login' className='font-semibold'>
+                Sign in
+              </Link>
             </p>
           )}
         </div>
