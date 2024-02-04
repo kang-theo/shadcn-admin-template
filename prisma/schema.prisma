@@ -1,3 +1,4 @@
+// npx prisma init
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -20,7 +21,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 1. npx prisma migrate dev --name-init: Generate an initial migration
+// 1. npx prisma migrate dev --name init: Generate an initial migration. Or
 // 2. npx prisma migrate dev --name my_custom_migration: Generate a new migration according to scheme changes
 //    To review the generated migration files in the prisma/migrations to understand the changes before applying them with 'npx prisma db push'.
 // 3. npx prisma db push: Apply the generated migration to the database

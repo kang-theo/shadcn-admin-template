@@ -9,6 +9,7 @@ function AdminLayout({
 }>) {
   return (
     // Tailwind Mobile Responsive
+    // components not changes with pages put here
     <div className='hidden flex-col md:flex'>
       <div className='border-b'>
         <div className='flex h-16 items-center px-4'>
