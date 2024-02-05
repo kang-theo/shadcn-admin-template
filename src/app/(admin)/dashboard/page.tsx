@@ -8,6 +8,8 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { DashboardStatistic } from "@/components/dashboard/DashboardStatistic";
+import { RecentSales } from "@/components/dashboard/RecentSales";
+import { OverviewChart } from "@/components/dashboard/OverviewChart";
 
 async function Dashboard() {
   return (
@@ -118,6 +120,10 @@ async function Dashboard() {
                 percent: "+201 since last hour"
               }}
             />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <OverviewChart />
+            <RecentSales />
           </div>
         </TabsContent>
       </Tabs>
