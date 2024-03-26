@@ -9,7 +9,7 @@ on:
 jobs:
     build:
         # runs-on Specify the virtual machine environment required to run the designated job task (required field).
-        runs-on: ubuntu-latest
+        runs-on: centos-7
         steps:
             # Get the source code
             - name: Code Checkout
