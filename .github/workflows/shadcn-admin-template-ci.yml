@@ -3,6 +3,7 @@ name: Package the application and upload it to AWS EC2.
 # Install git, npm, pm2 firstly on the EC2 instance.
 
 on:
+    workflow_dispatch: # trigger the workflow manually
     push:
         branches:
             - main
