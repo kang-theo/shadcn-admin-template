@@ -1,5 +1,7 @@
 name: Package the application and upload it to AWS EC2.
 
+# Install git, npm, pm2 firstly on the EC2 instance.
+
 on:
     push:
         branches:
@@ -9,7 +11,7 @@ on:
 jobs:
     build:
         # runs-on Specify the virtual machine environment required to run the designated job task (required field).
-        runs-on: centos-7
+        runs-on: ubuntu-latest
         steps:
             # Get the source code
             - name: Code Checkout
@@ -29,17 +31,26 @@ jobs:
               run: npm run build
 
             - name: Release to AWS EC2
-              uses: easingthemes/ssh-deploy@main
-              env:
-                  # Private key
-                  SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-                  # scp params
-                  ARGS: '-avzr --delete'
-                  # Source directory
-                  SOURCE: 'dist'
-                  # Server ip
-                  REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-                  # User
-                  REMOTE_USER: 'root'
-                  # Target directory
-                  TARGET: '/www/wwwroot'
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.REMOTE_HOST }}
+                username: ${{ secrets.REMOTE_USER }}
+                key: ${{ secrets.PRIVATE_KEY }}
+                script: |
+                  cd /home/ec2-user/workspace/shadcn-admin-template
+                  git pull
+                  npm install
+                  npm run build
+                  pm2 restart shadcn-admin-template
+                  
+                # `git pull`, which means you already have a repo on the server
+                # `pm2 restart`, which means you have already run pm2 start when preparing the environment 
+                # sudo npm install pm2 -g | npm install pm2 -D
+                # [npx] pm2 start npm --name shadcn-admin-template -- run start -- -p 3000
+                # [npx] pm2 list nextjs-app
+                # [npx] pm2 stop shadcn-admin-template  
+                # [npx] pm2 restart shadcn-admin-template
+                # [npx] pm2 delete shadcn-admin-template
+                # Refer to: 
+                  # https://dev.to/yousufbasir/automating-nextjs-application-deployment-with-github-actions-38ac
+                  # https://medium.com/@mudasirhaji/deploying-a-next-js-app-manually-on-aws-ec2-a-step-by-step-guide-58b266ff1c52
