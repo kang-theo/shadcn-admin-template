@@ -1,0 +1,45 @@
+name: Package the application and upload it to AWS EC2.
+
+on:
+    push:
+        branches:
+            - main
+            - release/*
+
+jobs:
+    build:
+        # runs-on Specify the virtual machine environment required to run the designated job task (required field).
+        runs-on: ubuntu-latest
+        steps:
+            # Get the source code
+            - name: Code Checkout
+              # Use the action library `actions/checkout` to checkout the source code.
+              uses: actions/checkout@main
+
+            - name: Install node.js
+              # Use the action library `actions/setup-node` to install node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Code packaging
+              run: npm run build
+
+            - name: Release to AWS EC2
+              uses: easingthemes/ssh-deploy@main
+              env:
+                  # Private key
+                  SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+                  # scp params
+                  ARGS: '-avzr --delete'
+                  # Source directory
+                  SOURCE: 'dist'
+                  # Server ip
+                  REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+                  # User
+                  REMOTE_USER: 'root'
+                  # Target directory
+                  TARGET: '/www/wwwroot'
