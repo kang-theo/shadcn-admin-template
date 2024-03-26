@@ -36,7 +36,7 @@ jobs:
               with:
                 host: ${{ secrets.REMOTE_HOST }}
                 username: ${{ secrets.REMOTE_USER }}
-                key: ${{ secrets.PRIVATE_KEY }}
+                key: ${{ secrets.SSH_PRIVATE_KEY }}
                 script: |
                   cd /home/ec2-user/workspace/shadcn-admin-template
                   git pull
