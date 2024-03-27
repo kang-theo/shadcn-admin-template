@@ -1,5 +1,18 @@
-This is a ![Static Badge](https://img.shields.io/badge/Next.js-Green)
- [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <h1 align="center">Shadcn Admin Template</h1>
+</p>
+<p align="center">
+  <a aria-label="Vercel logo" href="https://vercel.com">
+    <img src="https://img.shields.io/badge/Vercel-blue.svg?style=for-the-badge&logo=Vercel&labelColor=000">
+  </a>
+  <a aria-label="Next.js" href="https://nextjs.org/">
+    <img alt="" src="https://img.shields.io/badge/Next.js-blueviolet.svg?style=for-the-badge&logo=Next.js&labelColor=000000&logoWidth=20">
+  </a>
+</p>
+
+
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
