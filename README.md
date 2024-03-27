@@ -1,15 +1,17 @@
-<p align="center">
-  <h1 align="center">Shadcn Admin Template</h1>
-</p>
+<h1 align="center">Shadcn Admin Template</h1>
+
 <p align="center">
 <!--   <a aria-label="Vercel logo" href="https://vercel.com">
     <img src="https://img.shields.io/badge/Vercel-blue.svg?style=for-the-badge&logo=Vercel&labelColor=000">
   </a> -->
- <a aria-label="AWS" href="https://aws.amazon.com/">
-    <img src="https://img.shields.io/badge/-AWS-orange?style=for-the-badge&logo=amazon-aws&labelColor=272f3d&color=f29d39">
-  </a>
   <a aria-label="Next.js" href="https://nextjs.org/">
     <img alt="" src="https://img.shields.io/badge/Next.js-blueviolet.svg?style=for-the-badge&logo=Next.js&labelColor=000000&logoWidth=20">
+  </a>
+  <a aria-label="Shadcn-ui" href="https://ui.shadcn.com/">
+    <img src="https://img.shields.io/badge/-shadcn--ui-black?style=for-the-badge&logo=shadcnui&color=black">
+  </a>
+  <a aria-label="AWS" href="https://aws.amazon.com/">
+    <img src="https://img.shields.io/badge/-Amazon AWS-orange?style=for-the-badge&logo=amazon-aws&labelColor=272f3d&color=f29d39">
   </a>
 </p>
 
